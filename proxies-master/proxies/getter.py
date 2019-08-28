@@ -223,7 +223,6 @@ class Crawler(metaclass=ProxyMetaClass):
         :param fullbg_image: (Image)完整图片
         :return: (Int)缺口离滑块的距离
         '''
-
         # 滑块的初始位置
         distance = 57
         # 遍历像素点横坐标
@@ -266,7 +265,7 @@ class Crawler(metaclass=ProxyMetaClass):
         for t in np.arange(0.0, seconds, 0.2):
             # ease = globals()[ease_func]
             if t < seconds*(2/5):
-                random_num = random.choice ( [0.1, 0.1, 0.1, 0.2, 0.2] )
+                random_num = random.choice ([0.1, 0.1, 0.1, 0.2, 0.2])
                 a += random_num
                 # print(a)
                 offset = round(self.ease_out_expo(a / seconds) * distance)
@@ -322,160 +321,163 @@ class Crawler(metaclass=ProxyMetaClass):
         # password = "Li891004" #'uniccc666'
         # 初始化
         # 登录
-        self.login(username, password)
-        # 获取缺口图片及其位置信息
-        bg, bg_position = self.get_image_info('bg')
-        # 获取完整图片及其位置信息
-        fullbg, fullbg_position = self.get_image_info('fullbg')
-        # 将混乱的缺口图片裁剪成小图，获取两行的位置信息
-        bg_first_line_img, bg_second_line_img = self.Corp(bg, bg_position)
-        # 将混乱的完整图片裁剪成小图，获取两行的位置信息
-        fullbg_first_line_img, fullbg_second_line_img = self.Corp(fullbg, fullbg_position)
-        # 根据两行图片信息拼接出缺口图片正确排列的图片
-        bg_image = self.put_imgs_together(bg_first_line_img, bg_second_line_img, 'bg.jpg')
-        # 根据两行图片信息拼接出完整图片正确排列的图片
-        fullbg_image = self.put_imgs_together(fullbg_first_line_img, fullbg_second_line_img, 'fullbg.jpg')
-        # 计算滑块移动距离
-        distance = self.get_distance(bg_image, fullbg_image)
-        # 计算移动轨迹
-        trace = self.get_trace(distance, 12, 'ease_out_expo')
-        # 移动滑块
-        self.move_to_gap(trace)
-        sleep(1)
-        # browser.get("https://www.tianyancha.com/company/3249343308")
-        # time.sleep(2)
-        # # 判断是否是验证码页面
-        # try:
-        #     if "".join(browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]').get_attribute('src')):
-        #         print("出现验证码")
-        #         # wait = WebDriverWait(browser,10)
-        #         # 右键单击图片
-        #         a_img = wait.until(EC.element_to_be_clickable((By.ID,"targetImgie")))
-        #         # 执行鼠标动作
-        #         actions = ActionChains(browser)
-        #         # 找到图片后右键单击图片
-        #         actions.context_click(a_img)
-        #         actions.perform()
-        #         # 发送键盘按键，根据不同的网页，
-        #         # 右键之后按对应次数向下键，
-        #         # 找到图片另存为菜单
-        #         pyautogui.typewrite(['down','down','enter'])
-        #         # 单击图片另存之后等1s敲回车
-        #         sleep(1)
-        #         pyautogui.typewrite(['enter'])
-        #         time.sleep(2)
-        #         b_img = wait.until(EC.element_to_be_clickable((By.ID,"bgImgie")))
-        #         # 执行鼠标动作
-        #         actions = ActionChains(browser)
-        #         # 找到图片后右键单击图片
-        #         actions.context_click(b_img)
-        #         actions.perform()
-        #         # 发送键盘按键，根据不同的网页，
-        #         # 右键之后按对应次数向下键，
-        #         # 找到图片另存为菜单
-        #         pyautogui.typewrite(['down','down','enter'])
-        #         # 单击图片另存之后等1s敲回车
-        #         sleep(1)
-        #         pyautogui.typewrite(['enter'])
-        #         time.sleep(3)
-        #         # 下载好两张验证码后引入拼接程序
-        #         from pinjie import pinjie
-        #         pinjie("C:\\Users\Administrator\Downloads\下载.png", "C:\\Users\Administrator\Downloads\下载 (1).png")
-        #         sleep(15) # 拼接需要一个过程，有点耗时
-        #         # 删除掉png格式图片（上面下载好的两张验证码）为了下一个ID存储验证码提供便利
-        #         path = "C:\\Users\Administrator\Downloads\\"
-        #         filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
-        #         for filename in filenames:
-        #             if ".png" in filename:
-        #                 os.remove(path+filename)
-        #         # 定位验证码坐标
-        #         imgelement = browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]')
-        #         location = imgelement.location
-        #         print(location)
-        #         # 接入超级鹰打码平台
-        #         chaojiying = Chaojiying_Client("L54555", "Li891004", '90004')
-        #         im = open('images/out.png', 'rb').read()
-        #         # 获取超级鹰返回坐标
-        #         r_json = chaojiying.PostPic(im, 9004)
-        #         print(r_json)
-        #         if r_json:
-        #             pic_str = r_json["pic_str"].split('|')
-        #
-        #             for pic in pic_str[:]:
-        #                 pic_x = pic.split(',')[0]
-        #
-        #                 pic_y = pic.split(',')[1]
-        #                 self.click_locxy(browser, location['x']-652+int(pic_x), location['y']-330+int(pic_y), left_click=True) # 左键点击
-        #         time.sleep(1)
-        #         browser.find_element_by_xpath('//div[@class="container"]/div/div/div[3]/div[2]').click()
-        #         time.sleep(2)
-        #         # 获取cookie值
-        #         try:
-        #             # 用取值的方法检查是否验证成功
-        #             if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
-        #                 cookie_items = browser.get_cookies()
-        #                 cookies = ""
-        #
-        #                 for cookie in cookie_items:
-        #                     cookies += cookie['name']+'='+cookie['value']+';'
-        #                 time.sleep(3)
-        #                 browser.close()
-        #                 return cookies
-        #         except Exception as e:
-        #             cookies = ""
-        #             browser.close()
-        #             return cookies
-        # except Exception as e:
-        #     path = "C:\\Users\Administrator\Downloads\\"
-        #     filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
-        #     for filename in filenames:
-        #         if ".png" in filename:
-        #             os.remove(path+filename)
-        #     # 获取cookie值
-        #     try:
-        #         # 用取值的方法检查是否登陆成功
-        #         if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
-        #             cookie_items = browser.get_cookies()
-        #             cookies = ""
-        #             for cookie in cookie_items:
-        #                 cookies += cookie['name']+'='+cookie['value']+';'
-        #             time.sleep(3)
-        #             browser.close()
-        #             return cookies
-        #     except Exception as e:
-        #         cookies = ""
-        #         browser.close()
-        #         return cookies
+        try:
+            self.login(username, password)
+            # 获取缺口图片及其位置信息
+            bg, bg_position = self.get_image_info('bg')
+            # 获取完整图片及其位置信息
+            fullbg, fullbg_position = self.get_image_info('fullbg')
+            # 将混乱的缺口图片裁剪成小图，获取两行的位置信息
+            bg_first_line_img, bg_second_line_img = self.Corp(bg, bg_position)
+            # 将混乱的完整图片裁剪成小图，获取两行的位置信息
+            fullbg_first_line_img, fullbg_second_line_img = self.Corp(fullbg, fullbg_position)
+            # 根据两行图片信息拼接出缺口图片正确排列的图片
+            bg_image = self.put_imgs_together(bg_first_line_img, bg_second_line_img, 'bg.jpg')
+            # 根据两行图片信息拼接出完整图片正确排列的图片
+            fullbg_image = self.put_imgs_together(fullbg_first_line_img, fullbg_second_line_img, 'fullbg.jpg')
+            # 计算滑块移动距离
+            distance = self.get_distance(bg_image, fullbg_image)
+            # 计算移动轨迹
+            trace = self.get_trace(distance, 12, 'ease_out_expo')
+            # 移动滑块
+            self.move_to_gap(trace)
+            sleep(1)
+            # browser.get("https://www.tianyancha.com/company/3249343308")
+            # time.sleep(2)
+            # # 判断是否是验证码页面
+            # try:
+            #     if "".join(browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]').get_attribute('src')):
+            #         print("出现验证码")
+            #         # wait = WebDriverWait(browser,10)
+            #         # 右键单击图片
+            #         a_img = wait.until(EC.element_to_be_clickable((By.ID,"targetImgie")))
+            #         # 执行鼠标动作
+            #         actions = ActionChains(browser)
+            #         # 找到图片后右键单击图片
+            #         actions.context_click(a_img)
+            #         actions.perform()
+            #         # 发送键盘按键，根据不同的网页，
+            #         # 右键之后按对应次数向下键，
+            #         # 找到图片另存为菜单
+            #         pyautogui.typewrite(['down','down','enter'])
+            #         # 单击图片另存之后等1s敲回车
+            #         sleep(1)
+            #         pyautogui.typewrite(['enter'])
+            #         time.sleep(2)
+            #         b_img = wait.until(EC.element_to_be_clickable((By.ID,"bgImgie")))
+            #         # 执行鼠标动作
+            #         actions = ActionChains(browser)
+            #         # 找到图片后右键单击图片
+            #         actions.context_click(b_img)
+            #         actions.perform()
+            #         # 发送键盘按键，根据不同的网页，
+            #         # 右键之后按对应次数向下键，
+            #         # 找到图片另存为菜单
+            #         pyautogui.typewrite(['down','down','enter'])
+            #         # 单击图片另存之后等1s敲回车
+            #         sleep(1)
+            #         pyautogui.typewrite(['enter'])
+            #         time.sleep(3)
+            #         # 下载好两张验证码后引入拼接程序
+            #         from pinjie import pinjie
+            #         pinjie("C:\\Users\Administrator\Downloads\下载.png", "C:\\Users\Administrator\Downloads\下载 (1).png")
+            #         sleep(15) # 拼接需要一个过程，有点耗时
+            #         # 删除掉png格式图片（上面下载好的两张验证码）为了下一个ID存储验证码提供便利
+            #         path = "C:\\Users\Administrator\Downloads\\"
+            #         filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
+            #         for filename in filenames:
+            #             if ".png" in filename:
+            #                 os.remove(path+filename)
+            #         # 定位验证码坐标
+            #         imgelement = browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]')
+            #         location = imgelement.location
+            #         print(location)
+            #         # 接入超级鹰打码平台
+            #         chaojiying = Chaojiying_Client("L54555", "Li891004", '90004')
+            #         im = open('images/out.png', 'rb').read()
+            #         # 获取超级鹰返回坐标
+            #         r_json = chaojiying.PostPic(im, 9004)
+            #         print(r_json)
+            #         if r_json:
+            #             pic_str = r_json["pic_str"].split('|')
+            #
+            #             for pic in pic_str[:]:
+            #                 pic_x = pic.split(',')[0]
+            #
+            #                 pic_y = pic.split(',')[1]
+            #                 self.click_locxy(browser, location['x']-652+int(pic_x), location['y']-330+int(pic_y), left_click=True) # 左键点击
+            #         time.sleep(1)
+            #         browser.find_element_by_xpath('//div[@class="container"]/div/div/div[3]/div[2]').click()
+            #         time.sleep(2)
+            #         # 获取cookie值
+            #         try:
+            #             # 用取值的方法检查是否验证成功
+            #             if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
+            #                 cookie_items = browser.get_cookies()
+            #                 cookies = ""
+            #
+            #                 for cookie in cookie_items:
+            #                     cookies += cookie['name']+'='+cookie['value']+';'
+            #                 time.sleep(3)
+            #                 browser.close()
+            #                 return cookies
+            #         except Exception as e:
+            #             cookies = ""
+            #             browser.close()
+            #             return cookies
+            # except Exception as e:
+            #     path = "C:\\Users\Administrator\Downloads\\"
+            #     filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
+            #     for filename in filenames:
+            #         if ".png" in filename:
+            #             os.remove(path+filename)
+            #     # 获取cookie值
+            #     try:
+            #         # 用取值的方法检查是否登陆成功
+            #         if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
+            #             cookie_items = browser.get_cookies()
+            #             cookies = ""
+            #             for cookie in cookie_items:
+            #                 cookies += cookie['name']+'='+cookie['value']+';'
+            #             time.sleep(3)
+            #             browser.close()
+            #             return cookies
+            #     except Exception as e:
+            #         cookies = ""
+            #         browser.close()
+            #         return cookies
 
 
-        # cookie_items = browser.get_cookies()
-        # cookies = ""
-        # for cookie in cookie_items:
-        #     cookies += cookie['name']+'='+cookie['value']+';'
-        # time.sleep(2)
-        # browser.close()
-        # return cookies
+            # cookie_items = browser.get_cookies()
+            # cookies = ""
+            # for cookie in cookie_items:
+            #     cookies += cookie['name']+'='+cookie['value']+';'
+            # time.sleep(2)
+            # browser.close()
+            # return cookies
 
 
-        cookies = {}
-        cookie_list = browser.get_cookies()
-        for i in cookie_list:
-            key = i.get('name')
-            value = i.get('value')
-            cookies[key] = value
-        send = Send_Click(url='https://www.tianyancha.com/usercenter/watch', cookies=cookies)
-        result = send.run()
-        if result == 200:
-            cookie_items = browser.get_cookies()
-            cookies = ""
-            for cookie in cookie_items:
-                cookies += cookie['name']+'='+cookie['value']+';'
+            cookies = {}
+            cookie_list = browser.get_cookies()
+            for i in cookie_list:
+                key = i.get('name')
+                value = i.get('value')
+                cookies[key] = value
+            send = Send_Click(url='https://www.tianyancha.com/usercenter/watch', cookies=cookies)
+            result = send.run()
+            if result == 200:
+                cookie_items = browser.get_cookies()
+                cookies = ""
+                for cookie in cookie_items:
+                    cookies += cookie['name']+'='+cookie['value']+';'
 
+                browser.close()
+                return cookies
+            else:
+                browser.close()
+                return ''
+        except:
             browser.close()
-            return cookies
-        else:
-            browser.close()
-            return ''
 
 
 
