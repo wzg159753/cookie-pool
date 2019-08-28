@@ -25,7 +25,7 @@ from time import sleep
 import random
 import numpy as np
 
-
+from send_click import Send_Click
 
 
 
@@ -342,110 +342,112 @@ class Crawler(metaclass=ProxyMetaClass):
         # 移动滑块
         self.move_to_gap(trace)
         sleep(1)
-        browser.get("https://www.tianyancha.com/company/3249343308")
-        time.sleep(2)
-        # 判断是否是验证码页面
-        try:
-            if "".join(browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]').get_attribute('src')):
-                print("出现验证码")
-                # wait = WebDriverWait(browser,10)
-                # 右键单击图片
-                a_img = wait.until(EC.element_to_be_clickable((By.ID,"targetImgie")))
-                # 执行鼠标动作
-                actions = ActionChains(browser)
-                # 找到图片后右键单击图片
-                actions.context_click(a_img)
-                actions.perform()
-                # 发送键盘按键，根据不同的网页，
-                # 右键之后按对应次数向下键，
-                # 找到图片另存为菜单
-                pyautogui.typewrite(['down','down','enter'])
-                # 单击图片另存之后等1s敲回车
-                sleep(1)
-                pyautogui.typewrite(['enter'])
-                time.sleep(2)
-                b_img = wait.until(EC.element_to_be_clickable((By.ID,"bgImgie")))
-                # 执行鼠标动作
-                actions = ActionChains(browser)
-                # 找到图片后右键单击图片
-                actions.context_click(b_img)
-                actions.perform()
-                # 发送键盘按键，根据不同的网页，
-                # 右键之后按对应次数向下键，
-                # 找到图片另存为菜单
-                pyautogui.typewrite(['down','down','enter'])
-                # 单击图片另存之后等1s敲回车
-                sleep(1)
-                pyautogui.typewrite(['enter'])
-                time.sleep(3)
-                # 下载好两张验证码后引入拼接程序
-                from pinjie import pinjie
-                pinjie("C:\\Users\Administrator\Downloads\下载.png", "C:\\Users\Administrator\Downloads\下载 (1).png")
-                sleep(15) # 拼接需要一个过程，有点耗时
-                # 删除掉png格式图片（上面下载好的两张验证码）为了下一个ID存储验证码提供便利
-                path = "C:\\Users\Administrator\Downloads\\"
-                filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
-                for filename in filenames:
-                    if ".png" in filename:
-                        os.remove(path+filename)
-                # 定位验证码坐标
-                imgelement = browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]')
-                location = imgelement.location
-                print(location)
-                # 接入超级鹰打码平台
-                chaojiying = Chaojiying_Client("L54555", "Li891004", '90004')
-                im = open('images/out.png', 'rb').read()
-                # 获取超级鹰返回坐标
-                r_json = chaojiying.PostPic(im, 9004)
-                print(r_json)
-                if r_json:
-                    pic_str = r_json["pic_str"].split('|')
+        # browser.get("https://www.tianyancha.com/company/3249343308")
+        # time.sleep(2)
+        # # 判断是否是验证码页面
+        # try:
+        #     if "".join(browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]').get_attribute('src')):
+        #         print("出现验证码")
+        #         # wait = WebDriverWait(browser,10)
+        #         # 右键单击图片
+        #         a_img = wait.until(EC.element_to_be_clickable((By.ID,"targetImgie")))
+        #         # 执行鼠标动作
+        #         actions = ActionChains(browser)
+        #         # 找到图片后右键单击图片
+        #         actions.context_click(a_img)
+        #         actions.perform()
+        #         # 发送键盘按键，根据不同的网页，
+        #         # 右键之后按对应次数向下键，
+        #         # 找到图片另存为菜单
+        #         pyautogui.typewrite(['down','down','enter'])
+        #         # 单击图片另存之后等1s敲回车
+        #         sleep(1)
+        #         pyautogui.typewrite(['enter'])
+        #         time.sleep(2)
+        #         b_img = wait.until(EC.element_to_be_clickable((By.ID,"bgImgie")))
+        #         # 执行鼠标动作
+        #         actions = ActionChains(browser)
+        #         # 找到图片后右键单击图片
+        #         actions.context_click(b_img)
+        #         actions.perform()
+        #         # 发送键盘按键，根据不同的网页，
+        #         # 右键之后按对应次数向下键，
+        #         # 找到图片另存为菜单
+        #         pyautogui.typewrite(['down','down','enter'])
+        #         # 单击图片另存之后等1s敲回车
+        #         sleep(1)
+        #         pyautogui.typewrite(['enter'])
+        #         time.sleep(3)
+        #         # 下载好两张验证码后引入拼接程序
+        #         from pinjie import pinjie
+        #         pinjie("C:\\Users\Administrator\Downloads\下载.png", "C:\\Users\Administrator\Downloads\下载 (1).png")
+        #         sleep(15) # 拼接需要一个过程，有点耗时
+        #         # 删除掉png格式图片（上面下载好的两张验证码）为了下一个ID存储验证码提供便利
+        #         path = "C:\\Users\Administrator\Downloads\\"
+        #         filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
+        #         for filename in filenames:
+        #             if ".png" in filename:
+        #                 os.remove(path+filename)
+        #         # 定位验证码坐标
+        #         imgelement = browser.find_element_by_xpath('//div[@class="box2"]//img[@id="targetImgie"]')
+        #         location = imgelement.location
+        #         print(location)
+        #         # 接入超级鹰打码平台
+        #         chaojiying = Chaojiying_Client("L54555", "Li891004", '90004')
+        #         im = open('images/out.png', 'rb').read()
+        #         # 获取超级鹰返回坐标
+        #         r_json = chaojiying.PostPic(im, 9004)
+        #         print(r_json)
+        #         if r_json:
+        #             pic_str = r_json["pic_str"].split('|')
+        #
+        #             for pic in pic_str[:]:
+        #                 pic_x = pic.split(',')[0]
+        #
+        #                 pic_y = pic.split(',')[1]
+        #                 self.click_locxy(browser, location['x']-652+int(pic_x), location['y']-330+int(pic_y), left_click=True) # 左键点击
+        #         time.sleep(1)
+        #         browser.find_element_by_xpath('//div[@class="container"]/div/div/div[3]/div[2]').click()
+        #         time.sleep(2)
+        #         # 获取cookie值
+        #         try:
+        #             # 用取值的方法检查是否验证成功
+        #             if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
+        #                 cookie_items = browser.get_cookies()
+        #                 cookies = ""
+        #
+        #                 for cookie in cookie_items:
+        #                     cookies += cookie['name']+'='+cookie['value']+';'
+        #                 time.sleep(3)
+        #                 browser.close()
+        #                 return cookies
+        #         except Exception as e:
+        #             cookies = ""
+        #             browser.close()
+        #             return cookies
+        # except Exception as e:
+        #     path = "C:\\Users\Administrator\Downloads\\"
+        #     filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
+        #     for filename in filenames:
+        #         if ".png" in filename:
+        #             os.remove(path+filename)
+        #     # 获取cookie值
+        #     try:
+        #         # 用取值的方法检查是否登陆成功
+        #         if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
+        #             cookie_items = browser.get_cookies()
+        #             cookies = ""
+        #             for cookie in cookie_items:
+        #                 cookies += cookie['name']+'='+cookie['value']+';'
+        #             time.sleep(3)
+        #             browser.close()
+        #             return cookies
+        #     except Exception as e:
+        #         cookies = ""
+        #         browser.close()
+        #         return cookies
 
-                    for pic in pic_str[:]:
-                        pic_x = pic.split(',')[0]
 
-                        pic_y = pic.split(',')[1]
-                        self.click_locxy(browser, location['x']-652+int(pic_x), location['y']-330+int(pic_y), left_click=True) # 左键点击
-                time.sleep(1)
-                browser.find_element_by_xpath('//div[@class="container"]/div/div/div[3]/div[2]').click()
-                time.sleep(2)
-                # 获取cookie值
-                try:
-                    # 用取值的方法检查是否验证成功
-                    if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
-                        cookie_items = browser.get_cookies()
-                        cookies = ""
-
-                        for cookie in cookie_items:
-                            cookies += cookie['name']+'='+cookie['value']+';'
-                        time.sleep(3)
-                        browser.close()
-                        return cookies
-                except Exception as e:
-                    cookies = ""
-                    browser.close()
-                    return cookies
-        except Exception as e:
-            path = "C:\\Users\Administrator\Downloads\\"
-            filenames = os.listdir("C:\\Users\Administrator\Downloads\\")
-            for filename in filenames:
-                if ".png" in filename:
-                    os.remove(path+filename)
-            # 获取cookie值
-            try:
-                # 用取值的方法检查是否登陆成功
-                if "".join(browser.find_element_by_xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]').text):
-                    cookie_items = browser.get_cookies()
-                    cookies = ""
-                    for cookie in cookie_items:
-                        cookies += cookie['name']+'='+cookie['value']+';'
-                    time.sleep(3)
-                    browser.close()
-                    return cookies
-            except Exception as e:
-                cookies = ""
-                browser.close()
-                return cookies
         # cookie_items = browser.get_cookies()
         # cookies = ""
         # for cookie in cookie_items:
@@ -453,6 +455,27 @@ class Crawler(metaclass=ProxyMetaClass):
         # time.sleep(2)
         # browser.close()
         # return cookies
+
+
+        cookies = {}
+        cookie_list = browser.get_cookies()
+        for i in cookie_list:
+            key = i.get('name')
+            value = i.get('value')
+            cookies[key] = value
+        send = Send_Click(url='https://www.tianyancha.com/usercenter/watch', cookies=cookies)
+        result = send.run()
+        if result == 200:
+            cookie_items = browser.get_cookies()
+            cookies = ""
+            for cookie in cookie_items:
+                cookies += cookie['name']+'='+cookie['value']+';'
+
+            browser.close()
+            return cookies
+        else:
+            browser.close()
+            return ''
 
 
 
