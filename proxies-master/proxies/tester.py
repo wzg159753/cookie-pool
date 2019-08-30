@@ -1,8 +1,4 @@
 # -*-coding:utf-8 -*-
-
-
-
-
 import asyncio
 import aiohttp
 import time
@@ -14,6 +10,7 @@ from db import RedisClient
 
 # 目标网址
 TEST_URL = 'https://www.tianyancha.com/company/2357560244'
+# TEST_URL = 'https://www.tianyancha.com/usercenter/watch'
 # 正确的响应码列表
 TRUE_STATUS_CODE = [200]
 # 同时测试一组代理的数量
@@ -48,6 +45,9 @@ class Tester:
                 result = response.text
                 html = etree.HTML(result)
                 print("".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')))
+                # username = "".join(html.xpath('//a[@class="title link-nav"]/text()'))
+                # print(username, '*'*20)
+                """"".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()'))"""
                 if response.status_code in TRUE_STATUS_CODE and "".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')):
                     # cookie可用
                     self.redis.max(key, proxy)

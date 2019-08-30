@@ -149,7 +149,7 @@ class Send_Click(object):
             'clickLocs': json.dumps(lis),  # 图片坐标
             't': str(int(datetime.now().timestamp() * 1000)),  # 当前时间戳
         }
-
+        print(params, '+'*10)
         # 验证成功
         # dd = str(int(datetime.now().timestamp() * 1000))
         # url = f'https://antirobot.tianyancha.com/captcha/checkCaptcha.json?captchaId={captchaId}&clickLocs={json.dumps(str(lis))}&t={str(int(datetime.now().timestamp() * 1000))}&_={str(int(datetime.now().timestamp() * 1000) - 100)}'
@@ -165,10 +165,11 @@ class Send_Click(object):
         html = etree.HTML(resp.text)
         user = html.xpath('//span[@class="ni-sp-name"]')
         print(user)
-        if user and title != '天眼查校验':
+        if user:
+        # if user and title != '天眼查校验':
             return 200
             # 继续操作
-        else:
+        elif title == '天眼查校验':
             # 如果是点触验证码
             # 调用验证 接打码平台 返回坐标 [{"x":72,"y":66},{"x":97,"y":32}]  坐标类型list 里面每个字符组成一个字典x,y  依次顺序
             if self.verify_image() == 'ok':
@@ -188,6 +189,8 @@ class Send_Click(object):
                 # 没验证成功  继续验证
                 # self.run()
                 return 503
+        else:
+            return 503
 
 if __name__ == '__main__':
     url = 'https://www.tianyancha.com/company/3270966165'
