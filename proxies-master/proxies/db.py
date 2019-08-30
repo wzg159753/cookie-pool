@@ -28,7 +28,7 @@ class RedisClient:
 
     def __init__(self, type, website, host=REDIS_HOST, port=REDIS_PORT):
         """初始化redis对象"""
-        self.db = redis.StrictRedis(host=host, port=port, db=14, password=REDIS_PASSWORD, decode_responses=True)
+        self.db = redis.StrictRedis(host=host, port=port, db=13, password=REDIS_PASSWORD, decode_responses=True)
         self.type = type
         self.website = website
 
@@ -78,6 +78,7 @@ class RedisClient:
     def decrease(self, key, proxy):
         """代理分数-1，小于指定阈值则删除"""
         score = self.db.zscore(key, proxy)
+        print(score)
         if score and score == MAX_SCORE:
             return self.db.delete(key)
         else:

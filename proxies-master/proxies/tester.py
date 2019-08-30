@@ -9,8 +9,8 @@ from db import RedisClient
 
 
 # 目标网址
-TEST_URL = 'https://www.tianyancha.com/company/2357560244'
-# TEST_URL = 'https://www.tianyancha.com/usercenter/watch'
+# TEST_URL = 'https://www.tianyancha.com/company/2357560244'
+TEST_URL = 'https://www.tianyancha.com/usercenter/watch'
 # 正确的响应码列表
 TRUE_STATUS_CODE = [200]
 # 同时测试一组代理的数量
@@ -44,11 +44,11 @@ class Tester:
                 response = requests.get(TEST_URL, headers=headers, timeout=30)
                 result = response.text
                 html = etree.HTML(result)
-                print("".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')))
-                # username = "".join(html.xpath('//a[@class="title link-nav"]/text()'))
-                # print(username, '*'*20)
+                # print("".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')))
+                user = "".join(html.xpath('//span[@class="ni-sp-name"]//text()'))
+                print(user, '*'*20)
                 """"".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()'))"""
-                if response.status_code in TRUE_STATUS_CODE and "".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')):
+                if response.status_code in TRUE_STATUS_CODE and user:
                     # cookie可用
                     self.redis.max(key, proxy)
                     print(key, 100, '可用')
@@ -60,11 +60,12 @@ class Tester:
                     #     self.redis.max(key, proxy)
                     #     print(key, 100, "通过点字验证")
                     # else:
-                    self.redis.decrease(key, proxy)
+                    a = self.redis.decrease(key, proxy)
+                    print(a)
                     print(key, -20, "状态码错误")
             except Exception as e:
-                self.redis.decrease(key, proxy)
-                print(key, -20, e)
+                # self.redis.decrease(key, proxy)
+                print(key, '测试错误', -20, e)
 
     async def start(self):
         """启动协程， 测试所有cookies"""
