@@ -11,8 +11,8 @@ from getter import Getter
 from tester import Tester
 
 # 周期
-TESTER_CYCLE = 10
-GETTER_CYCLE = 300
+TESTER_CYCLE = 300
+GETTER_CYCLE = 180
 
 # 模块开关
 TESTER_ENABLE = True

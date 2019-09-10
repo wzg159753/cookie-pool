@@ -10,6 +10,7 @@ from lxml import etree
 from requests.sessions import cookiejar_from_dict
 
 from chaojiying import Chaojiying_Client
+from send_email import SendEmail
 
 
 class Send_Click(object):
@@ -20,6 +21,7 @@ class Send_Click(object):
     def __init__(self, url, cookies2=None, proxies=None, cookies=None):
         self.url = url
         self.proxies = proxies
+        self.email = SendEmail()
         # cookies = cookies2 if cookies2 else self._get_cookies()
         self.session = requests.Session()
         self.session.cookies = cookiejar_from_dict(cookies)  # session设置cookie
@@ -188,6 +190,7 @@ class Send_Click(object):
             else:
                 # 没验证成功  继续验证
                 # self.run()
+                self.email.run('Login verification failed, such as continuous occurrence of the representative Super Eagle is not enough!')
                 return 503
         else:
             return 503

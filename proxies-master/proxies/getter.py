@@ -456,14 +456,14 @@ class Crawler(metaclass=ProxyMetaClass):
             # browser.close()
             # return cookies
 
-
+            time.sleep(1)
             cookies = {}
             cookie_list = browser.get_cookies()
             for i in cookie_list:
                 key = i.get('name')
                 value = i.get('value')
                 cookies[key] = value
-            send = Send_Click(url='https://www.tianyancha.com/usercenter/watch', cookies=cookies)
+            send = Send_Click(url='https://www.tianyancha.com/usercenter/myorder', cookies=cookies)
             result = send.run()
             if result == 200:
                 cookie_items = browser.get_cookies()

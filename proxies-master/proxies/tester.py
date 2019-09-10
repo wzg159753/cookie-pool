@@ -10,11 +10,11 @@ from db import RedisClient
 
 # 目标网址
 # TEST_URL = 'https://www.tianyancha.com/company/2357560244'
-TEST_URL = 'https://www.tianyancha.com/usercenter/watch'
+TEST_URL = 'https://www.tianyancha.com/usercenter/myorder'
 # 正确的响应码列表
 TRUE_STATUS_CODE = [200]
 # 同时测试一组代理的数量
-BATCH_TEST_SIZE = 50
+BATCH_TEST_SIZE = 20
 
 
 class Tester:
@@ -41,28 +41,30 @@ class Tester:
                         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36"}
 
                 # async with session.get(TEST_URL, headers=headers, timeout=30) as response:
-                response = requests.get(TEST_URL, headers=headers, timeout=30)
-                result = response.text
-                html = etree.HTML(result)
-                # print("".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')))
-                user = "".join(html.xpath('//span[@class="ni-sp-name"]//text()'))
-                print(user, '*'*20)
-                """"".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()'))"""
-                if response.status_code in TRUE_STATUS_CODE and user:
-                    # cookie可用
-                    self.redis.max(key, proxy)
-                    print(key, 100, '可用')
-                else:
-                    # cookie不可用
-                    # send = Send_Click()
-                    # staus = send.run(proxy)
-                    # if staus:
-                    #     self.redis.max(key, proxy)
-                    #     print(key, 100, "通过点字验证")
-                    # else:
-                    a = self.redis.decrease(key, proxy)
-                    print(a)
-                    print(key, -20, "状态码错误")
+                try:
+                    response = requests.get(TEST_URL, headers=headers, timeout=30)
+                    result = response.text
+                    html = etree.HTML(result)
+                    # print("".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')))
+                    user = "".join(html.xpath('//span[@class="ni-sp-name"]//text()'))
+                    print(user, '*'*20)
+                    """"".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()'))"""
+                    if response.status_code in TRUE_STATUS_CODE and user:
+                        # cookie可用
+                        self.redis.max(key, proxy)
+                        print(key, 100, '可用')
+                    else:
+                        # cookie不可用
+                        # send = Send_Click()
+                        # staus = send.run(proxy)
+                        # if staus:
+                        #     self.redis.max(key, proxy)
+                        #     print(key, 100, "通过点字验证")
+                        # else:
+                        a = self.redis.decrease(key, proxy)
+                        print(key, -20, "状态码错误")
+                except Exception as e:
+                    print(key, '请求错误', -20, e)
             except Exception as e:
                 # self.redis.decrease(key, proxy)
                 print(key, '测试错误', -20, e)

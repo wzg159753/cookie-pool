@@ -12,7 +12,7 @@ MIN_SCORE = 0
 INIT_SCORE = 90
 
 # 连接信息
-REDIS_HOST = '192.168.1.53'
+REDIS_HOST = '221.214.181.70'
 REDIS_PORT = 6379
 # REDIS_PASSWORD = "a123456"
 REDIS_PASSWORD = "uniccc2019"
@@ -28,7 +28,7 @@ class RedisClient:
 
     def __init__(self, type, website, host=REDIS_HOST, port=REDIS_PORT):
         """初始化redis对象"""
-        self.db = redis.StrictRedis(host=host, port=port, db=13, password=REDIS_PASSWORD, decode_responses=True)
+        self.db = redis.StrictRedis(host=host, port=port, db=14, password=REDIS_PASSWORD, decode_responses=True)
         self.type = type
         self.website = website
 
