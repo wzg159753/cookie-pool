@@ -4,8 +4,7 @@ import aiohttp
 import time
 from lxml import etree
 import requests
-from send_click import Send_Click
-from db import RedisClient
+from schedule.db import RedisClient
 
 
 # 目标网址

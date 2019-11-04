@@ -1,6 +1,4 @@
-import requests
-
-from db import RedisClient
+from schedule.db import RedisClient
 
 conn = RedisClient('accounts', 'tianyancha')
 

@@ -1,16 +1,7 @@
 # -*-coding:utf-8 -*-
 
 
-from bs4 import BeautifulSoup
-
-from db import RedisClient, POOL_UPPER_THRESHLD
-from utils import get_page
-from selenium.webdriver.common.action_chains import ActionChains
-from chaojiying import Chaojiying_Client
-import os
-import pyautogui
-
-
+from schedule.db import RedisClient, POOL_UPPER_THRESHLD
 
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -25,7 +16,7 @@ from time import sleep
 import random
 import numpy as np
 
-from send_click import Send_Click
+from schedule.send_click import Send_Click
 
 
 

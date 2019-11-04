@@ -9,8 +9,8 @@ from PIL import Image
 from lxml import etree
 from requests.sessions import cookiejar_from_dict
 
-from chaojiying import Chaojiying_Client
-from send_email import SendEmail
+from util.chaojiying import Chaojiying_Client
+from schedule.send_email import SendEmail
 
 
 class Send_Click(object):

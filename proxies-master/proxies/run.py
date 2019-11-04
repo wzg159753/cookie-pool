@@ -7,8 +7,8 @@ from multiprocessing import Process
 sys.path.append("E:\烟台所需\lwl_spider\proxies-master\proxies-master\proxies")
 
 from api import app
-from getter import Getter
-from tester import Tester
+from schedule.getter import Getter
+from util.tester import Tester
 
 # 周期
 TESTER_CYCLE = 300

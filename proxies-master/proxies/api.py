@@ -7,7 +7,7 @@ monkey.patch_all()
 from flask import Flask, g
 import json
 
-from db import RedisClient
+from schedule.db import RedisClient
 
 
 app = Flask(__name__)

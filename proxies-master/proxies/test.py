@@ -1,12 +1,16 @@
-# import asyncio
-#
-import requests
-from lxml import etree
-#
-# def func(i):
-#     print(f'我是{i}')
-#
-#
-# track = [func(i) for i in range(20)]
-# asyncio.gather(*track)
+import asyncio
 
+
+async def parse(i):
+    try:
+        print('*'*50, i)
+    except:
+        print(111111111111111111)
+
+
+async def start():
+    tacks = [asyncio.create_task(parse(i)) for i in range(100)]
+    await asyncio.gather(*tacks)
+
+
+asyncio.run(start())
