@@ -5,6 +5,7 @@ import time
 from lxml import etree
 import requests
 from schedule.db import RedisClient
+from util.configtion import logger
 
 
 # 目标网址
@@ -46,12 +47,11 @@ class Tester:
                     html = etree.HTML(result)
                     # print("".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()')))
                     user = "".join(html.xpath('//span[@class="ni-sp-name"]//text()'))
-                    print(user, '*'*20)
                     """"".join(html.xpath('//div[@class="box -company-box "]/div[@class="content"]/div[@class="header"]/h1[@class="name"]/text()'))"""
                     if response.status_code in TRUE_STATUS_CODE and user:
                         # cookie可用
                         self.redis.max(key, proxy)
-                        print(key, 100, '可用')
+                        logger.info(f'用户可用 - {user}')
                     else:
                         # cookie不可用
                         # send = Send_Click()
@@ -60,13 +60,13 @@ class Tester:
                         #     self.redis.max(key, proxy)
                         #     print(key, 100, "通过点字验证")
                         # else:
-                        a = self.redis.decrease(key, proxy)
-                        print(key, -20, "状态码错误")
+                        self.redis.decrease(key, proxy)
+                        logger.warning(f'{key} 账号, 状态吗错误')
                 except Exception as e:
-                    print(key, '请求错误', -20, e)
+                    logger.error(f'{key} 账号, 请求错误 - {e}')
             except Exception as e:
                 # self.redis.decrease(key, proxy)
-                print(key, '测试错误', -20, e)
+                logger.error(f'{key} 账号, 测试错误 - {e}')
 
     async def start(self):
         """启动协程， 测试所有cookies"""
@@ -75,7 +75,7 @@ class Tester:
             for key in keys:
                 if "tianyancha" not in key:
                     proxies = self.redis.all(key)
-                    print(key)
+                    # print(key)
                     for i in range(0, len(proxies)):
                         test_proxies = proxies[i: i+BATCH_TEST_SIZE]
                         tasks = [self.test_one_proxy(key,proxy) for proxy in test_proxies]
@@ -84,7 +84,7 @@ class Tester:
                 else:
                     pass
         except Exception as e:
-            print('测试器发生错误', e.args)
+            logger.error(f'测试器发生错误 - {e.args}')
 
     def run(self):
         asyncio.run(self.start())

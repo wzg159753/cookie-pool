@@ -1,6 +1,4 @@
 # -*-coding:utf-8 -*-
-
-
 from schedule.db import RedisClient, POOL_UPPER_THRESHLD
 
 from selenium import webdriver
@@ -17,6 +15,7 @@ import random
 import numpy as np
 
 from schedule.send_click import Send_Click
+from util.configtion import logger
 
 
 
@@ -497,20 +496,21 @@ class Getter:
         for username in accounts_usernames[:]:
             if not username in keys:
                 password = self.accounts_db.get_value(username)
-                print('正在生成Cookies', '账号', username, '密码', password)
+                logger.info(f'正在生成Cookies - 账号 {username} - 密码 {password}')
                 if not self.is_over_threshold():
                     try:
                         time.sleep(5)
                         cookie = self.crawler.crawl_main(username, password)
                         if cookie:
                             self.redis.add(username, cookie)
-                            print("cookie有效")
+                            logger.info(f"账号 {username} cookie有效")
                         else:
-                            print("监控到cookie为空")
+                            print("监控到cookie为空, 登录失败")
                     except Exception as e:
-                        pass
+                        logger.warning(f'请求出错 - {e}')
             else:
-                print('账号', username, "存在于cookie池里")
+                # print('账号', username, "存在于cookie池里")
+                pass
 
 
 if __name__ == '__main__':
