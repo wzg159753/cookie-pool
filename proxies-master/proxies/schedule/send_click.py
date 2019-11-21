@@ -9,6 +9,7 @@ from PIL import Image
 from lxml import etree
 from requests.sessions import cookiejar_from_dict
 
+from util.configtion import logger
 from util.chaojiying import Chaojiying_Client
 from schedule.send_email import SendEmail
 
@@ -86,8 +87,6 @@ class Send_Click(object):
         :param response:
         :return:
         """
-        # response_html = etree.HTML(response.text)
-        # company_id = response_html.xpath('//div[@class="search-result-single   "]/@data-id')
         title = re.search(r'<title>(.*?)</title>', response)
         return title.group(1) if title else None
 
@@ -117,7 +116,7 @@ class Send_Click(object):
         new_image = bytes_image.getvalue()
         dict_data = chaojiying.PostPic(new_image, 9004)  # 1902 验证码类型  官方网站>>价格体系 3.4+版 print 后要加()
         pic_str = dict_data.get('pic_str').split('|')
-        print(pic_str)
+        logger.info(f'坐标信息 - {pic_str}')
         lis = []
         if pic_str[0]:
             [lis.append({'x':int(data.split(',')[0]),'y':int(data.split(',')[1])-30}) for data in pic_str]
@@ -141,7 +140,6 @@ class Send_Click(object):
         targetImage = data.get('targetImage')  # 拿到要顺序点击的字符
         bgImage = data.get('bgImage')  # 拿到字符图片
         captchaId = data.get('id')  # 拿到图片id
-        print(result.json())
         # 拼接图片  函数里面接入打码平台
         lis = self.slice(targetImage, bgImage)
 
@@ -151,22 +149,19 @@ class Send_Click(object):
             'clickLocs': json.dumps(lis),  # 图片坐标
             't': str(int(datetime.now().timestamp() * 1000)),  # 当前时间戳
         }
-        print(params, '+'*10)
         # 验证成功
-        # dd = str(int(datetime.now().timestamp() * 1000))
-        # url = f'https://antirobot.tianyancha.com/captcha/checkCaptcha.json?captchaId={captchaId}&clickLocs={json.dumps(str(lis))}&t={str(int(datetime.now().timestamp() * 1000))}&_={str(int(datetime.now().timestamp() * 1000) - 100)}'
         resp = self.download("http://antirobot.tianyancha.com/captcha/checkCaptcha.json", params=params)
-        print(resp.json(), '*'*10)
+        logger.info(f'验证结果 - {resp.json()}')
         return resp.json().get('state')
 
     def run(self):
         # 爬接口  如果是正常网页  title不会是  天眼查验证
         resp = self.download(self.url)
         title = self.verify(resp.text)
-        print(title, '++++++++++++++++++++++++++++++')
+        logger.info(f'判断网页名称 - {title}')
         html = etree.HTML(resp.text)
         user = html.xpath('//span[@class="ni-sp-name"]')
-        print(user)
+        logger.info('页面正常')
         if user:
         # if user and title != '天眼查校验':
             return 200
@@ -180,9 +175,9 @@ class Send_Click(object):
                 html = etree.HTML(response.text)
                 result = html.xpath('//span[@class="ni-sp-name"]')
                 # //span[@class="ni-sp-name"]
-                print(result, '='*10)
+                # print(result, '='*10)
                 if result:
-                    print(response.status_code)
+                    logger.info(f'验证成功 - {response.status_code}')
                     return response.status_code
                 else:
                     return 503

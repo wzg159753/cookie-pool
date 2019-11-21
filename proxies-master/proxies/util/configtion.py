@@ -1,4 +1,4 @@
-from util.flask_access import Logger
+from log.flask_access import Logger
 
 
 log = Logger(level='info')
