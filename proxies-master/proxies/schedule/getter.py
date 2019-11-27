@@ -505,7 +505,7 @@ class Getter:
                             self.redis.add(username, cookie)
                             logger.info(f"账号 {username} cookie有效")
                         else:
-                            print("监控到cookie为空, 登录失败")
+                            logger.info("监控到cookie为空, 登录失败")
                     except Exception as e:
                         logger.warning(f'请求出错 - {e}')
             else:

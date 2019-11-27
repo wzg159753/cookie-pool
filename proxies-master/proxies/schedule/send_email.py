@@ -2,12 +2,6 @@ import smtplib
 from email.mime.text import MIMEText
 
 
-
-
-
-
-
-
 class SendEmail(object):
     """
     发送邮件
