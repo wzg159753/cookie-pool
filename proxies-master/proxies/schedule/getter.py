@@ -18,11 +18,8 @@ from schedule.send_click import Send_Click
 from util.configtion import logger
 
 
-
-
 class ProxyMetaClass(type):
     """元类，初始化类时记录所有以crawl_开头的方法"""
-
     def __new__(mcs, name, bases, attrs):
         count = 0
         attrs['CrawlFunc'] = []
@@ -41,12 +38,10 @@ class Crawler(metaclass=ProxyMetaClass):
     #     proxies = []
     #     proxies.append(cookie)
     #     return proxies
-
     # 登录
     def login(self, username, password):
         # 定义为全局变量，方便其他模块使用
-        global url,browser,wait
-
+        global url, browser, wait
         # 登录界面的url
         url = 'https://www.tianyancha.com/login'
         # 实例化一个chrome浏览器
@@ -67,10 +62,7 @@ class Crawler(metaclass=ProxyMetaClass):
         browser.get(url)
         sleep(1)
 
-
         # 设置等待超时
-
-
         wait = WebDriverWait(browser, 20)
         # 获取用户名输入框
         browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div/div[2]').click()
@@ -82,14 +74,12 @@ class Crawler(metaclass=ProxyMetaClass):
         browser.find_element_by_xpath(".//*[@id='web-content']/div/div[2]/div/div[2]/div/div[3]/div[2]/div[5]").click()
         sleep(1)
 
-
     # 获取图片信息
     def get_image_info(self, img):
         '''
         :param img: (Str)想要获取的图片类型：带缺口、原始
         :return: 该图片(Image)、位置信息(List)
         '''
-
         # 将网页源码转化为能被解析的lxml格式
         soup = BeautifulSoup(browser.page_source, 'lxml')
         # 获取验证图片的所有组成片标签
@@ -108,7 +98,6 @@ class Crawler(metaclass=ProxyMetaClass):
         # 返回图片对象及其位置信息
         return image, position
 
-
     # 获取小图片位置
     def get_position(self, img):
         '''
@@ -126,7 +115,6 @@ class Crawler(metaclass=ProxyMetaClass):
             img_position.append(position)
         return img_position
 
-
     # 裁剪图片
     def Corp(self, image, position):
         '''
@@ -134,7 +122,6 @@ class Crawler(metaclass=ProxyMetaClass):
         :param position: (List)该图片的位置信息
         :return: (List)存放裁剪后的每个图片信息
         '''
-
         # 第一行图片信息
         first_line_img = []
         # 第二行图片信息
@@ -145,7 +132,6 @@ class Crawler(metaclass=ProxyMetaClass):
             if pos['y'] == 0:
                 second_line_img.append(image.crop((abs(pos['x']), 0, abs(pos['x']) + 10, 58)))
         return first_line_img, second_line_img
-
 
     # 拼接大图
     def put_imgs_together(self, first_line_img, second_line_img, img_name):
@@ -178,8 +164,6 @@ class Crawler(metaclass=ProxyMetaClass):
         # 返回图片对象
         return image
 
-
-
     # 判断像素是否相同
     def is_pixel_equal(self, bg_image, fullbg_image, x, y):
         """
@@ -205,7 +189,6 @@ class Crawler(metaclass=ProxyMetaClass):
             # 如果差值在判断值之外，返回不是相同像素
             return False
 
-
     # 计算滑块移动距离
     def get_distance(self, bg_image, fullbg_image):
         '''
@@ -224,23 +207,17 @@ class Crawler(metaclass=ProxyMetaClass):
                     # 返回此时横轴坐标就是滑块需要移动的距离
                     return i
 
-
     def ease_out_quad(self, x):
-
         return 1 - (1 - x) * (1 - x)
 
     def ease_out_quart(self, x):
-
         return 1 - pow(1 - x, 4)
 
     def ease_out_expo(self, x):
-
         if x == 1:
             return 1
         else:
             return 1 - pow(2, -10 * x)
-
-
 
     #构造滑动轨迹
     def get_trace(self, distance, seconds, ease_func):
@@ -273,7 +250,6 @@ class Crawler(metaclass=ProxyMetaClass):
 
         return tracks
 
-
     # 模拟拖动
     def move_to_gap(self, trace):
 
@@ -289,7 +265,6 @@ class Crawler(metaclass=ProxyMetaClass):
         # 释放滑块
         ActionChains(browser).release().perform()
 
-
     def click_locxy(self, dr, x, y, left_click=True):
         '''
         dr:浏览器
@@ -303,7 +278,6 @@ class Crawler(metaclass=ProxyMetaClass):
         else:
             ActionChains(dr).move_by_offset(x, y).context_click().perform()
         ActionChains(dr).move_by_offset(-x, -y).perform()
-
 
     # 主程序
     def crawl_main(self, username, password):
@@ -468,11 +442,6 @@ class Crawler(metaclass=ProxyMetaClass):
                 return ''
         except:
             browser.close()
-
-
-
-
-
 
 
 class Getter:
