@@ -64,15 +64,24 @@ class Crawler(metaclass=ProxyMetaClass):
 
         # 设置等待超时
         wait = WebDriverWait(browser, 20)
+        pws_login = browser.find_element_by_xpath('.//div[@tyc-event-ch="Login.PasswordLogin"]').click()
         # 获取用户名输入框
-        browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div/div[2]').click()
+        # account = browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div/div[2]')
+        # account.click()
+        account = browser.find_element_by_xpath('.//input[@tyc-ch="Login.PasswordLogin.Record"]')
+        # account.click()
+        account.send_keys(username)
         # 输入用户名
-        browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div[2]/div[2]/input').send_keys(username)
+        # pwd = browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div[2]/div[2]/input')
+        # pwd.send_keys(username)
+
         # 输入密码
-        browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div[2]/div[3]/input').send_keys(password)
+        # browser.find_element_by_xpath('.//*[@id="web-content"]/div/div[2]/div/div[2]/div/div[3]/div[2]/div[3]/input').send_keys(password)
+        browser.find_element_by_xpath('.//input[@id="password"]').send_keys(password)
         # 点击登陆
-        browser.find_element_by_xpath(".//*[@id='web-content']/div/div[2]/div/div[2]/div/div[3]/div[2]/div[5]").click()
-        sleep(1)
+        # browser.find_element_by_xpath(".//*[@id='web-content']/div/div[2]/div/div[2]/div/div[3]/div[2]/div[5]").click()
+        browser.find_element_by_xpath(".//div[@tyc-event-ch='Login.PasswordLogin.Login']").click()
+        sleep(3)
 
     # 获取图片信息
     def get_image_info(self, img):

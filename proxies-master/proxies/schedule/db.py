@@ -120,3 +120,11 @@ class RedisClient:
         """获取全部keys"""
         # print(self.db.keys())
         return self.db.keys()
+
+    def del_key(self, key):
+        """
+        删除cookie
+        :param key:
+        :return:
+        """
+        self.db.delete(key)

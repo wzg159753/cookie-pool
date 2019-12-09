@@ -4,13 +4,16 @@
 from gevent import pywsgi
 from gevent import monkey
 monkey.patch_all()
-from flask import Flask, g
+from flask import Flask, g, request
 import json
 
 from schedule.db import RedisClient
+from schedule.getter import Crawler
+from util.configtion import logger
 
 
 app = Flask(__name__)
+crawler = Crawler()
 
 
 def get_conn():
@@ -19,7 +22,6 @@ def get_conn():
         website = 'tianyancha'
         g.redis = RedisClient('accounts', website=website)
     return g.redis
-
 
 @app.route('/')
 def index():
@@ -63,5 +65,5 @@ if __name__ == '__main__':
     from werkzeug.debug import DebuggedApplication
     app.debug = True
     dapp = DebuggedApplication(app, evalex= True)
-    server = pywsgi.WSGIServer(( '127.0.0.1', 5000), dapp)
+    server = pywsgi.WSGIServer(('127.0.0.1', 5000), dapp)
     server.serve_forever()
