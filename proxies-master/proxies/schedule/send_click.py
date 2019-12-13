@@ -119,7 +119,7 @@ class Send_Click(object):
         logger.info(f'坐标信息 - {pic_str}')
         lis = []
         if pic_str[0]:
-            [lis.append({'x':int(data.split(',')[0]),'y':int(data.split(',')[1])-30}) for data in pic_str]
+            [lis.append({'x': int(data.split(',')[0]), 'y':int(data.split(',')[1])-30}) for data in pic_str]
         # ===============模拟打码平台=================
         # for _ in range(4):
         #     x = int(input('请输入坐标x:'))

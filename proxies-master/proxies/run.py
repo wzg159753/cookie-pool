@@ -10,8 +10,8 @@ from util.tester import Tester
 from util.configtion import logger
 
 # 周期
-TESTER_CYCLE = 300
-GETTER_CYCLE = 300
+TESTER_CYCLE = 60
+GETTER_CYCLE = 60
 
 # 模块开关
 TESTER_ENABLE = True
