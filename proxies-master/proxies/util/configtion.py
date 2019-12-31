@@ -1,5 +1,5 @@
-from log.flask_access import Logger
+from log.flask_access import Logging
 
 
-log = Logger(level='info')
+log = Logging()
 logger = log.get_logger()
